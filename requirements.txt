@@ -1,0 +1,3 @@
+Deeploy @ git+https://github.com/pulp-platform/Deeploy.git@devel
+prettytable
+rich
