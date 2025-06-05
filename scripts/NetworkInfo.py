@@ -53,5 +53,5 @@ iSoftmax = NetworkInfo(
 
 add = NetworkInfo(
         dir="../networks/add",
-        inputTypes = { "input_0": PointerClass(int8_t), "input_1": PointerClass(int8_t)}
+        inputTypes = { "input_0": PointerClass(uint8_t), "input_1": PointerClass(uint8_t)}
 )
