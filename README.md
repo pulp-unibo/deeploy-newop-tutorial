@@ -9,29 +9,6 @@
 - `third_party`: third party libraries
 - `util`: utility C files
 
-
-## Docker
-
-In this demo we will use the prebuilt docker image of Deeploy to circumvent installing the necessary toolchain and emulation.
-
-### Building the image
-
-```
-docker build -t tasi-demo .
-```
-
-### Executing commands
-
-```
-docker run --rm --tty --mount type=bind,src=$(pwd),dst=/demo tasi-demo bash -c "<cmd>"
-```
-
-e.g. to make the test:
-
-```
-docker run --mount type=bind,src=$(pwd),dst=/demo tasi-demo bash -c "make test"
-```
-
 ## Deeploy
 
 [Documentation](https://pulp-platform.github.io/Deeploy/branch/devel/)
@@ -39,12 +16,6 @@ docker run --mount type=bind,src=$(pwd),dst=/demo tasi-demo bash -c "make test"
 Templating language used by Deeploy: [Mako](https://www.makotemplates.org/)
 
 ### Getting Deeploy
-
-```
-pip install git+https://github.com/pulp-platform/Deeploy.git@devel
-```
-
-Once you have familiarized yourself enough with Deeploy and want to change the internals, do an editable install:
 
 ```
 git clone https://github.com/pulp-platform/Deeploy.git --branch devel
