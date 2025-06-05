@@ -39,19 +39,20 @@ We will support two versions of the kernel:
 Let us now look into `Parsers.py` to define the node parser. The parser extracts relevant information from an ONNX node, which will then be used in Deeploy's flow.
 The parser is a class extending `NodeParser`, with two methods `parseNode` and `parseNodeCtxt` that are used to check whether the node is compliant with expectations on number of I/Os and to actually extract information, respectively.
 
-1. Adapt the name of the `PlaceholderParser`.
-2. In `parseNode`, check that the number of inputs and outputs is correct and return `True` in that case.
-3. In `parseNodeCtxt`, you associate ONNX input/output names with an internal `operatorRepresentation`. Start this by extracting the I/Os out of the `NetworkContext`:
+1. Import the appropriate parser from Deeploy for an `Add` node.
+2. Adapt the name of the `PlaceholderParser`.
+3. In `parseNode`, check that the number of inputs and outputs is correct and return `True` in that case.
+4. In `parseNodeCtxt`, you associate ONNX input/output names with an internal `operatorRepresentation`. Start this by extracting the I/Os out of the `NetworkContext`:
 ```
 data_ = ctxt.lookup(node.<IO>.name)
 ```
 where `<IO>` is one of the inputs/outputs: `inputs[0], inputs[1]..., outputs[0]...`. You need to do this for all I/Os (adapting `data_`).
-4. Add the extracted name to the `operatorRepresentation` for each I/O:
+5. Add the extracted name to the `operatorRepresentation` for each I/O:
 ```
 self.operatorRepresentation['DATA_LABEL'] = data_.name
 ```
 The labels you define here are used also in other files, so keep track! 
-5. Add also two other labels, one for the total vector size, the other for the last dimension:
+6. Add also two other labels, one for the total vector size, the other for the last dimension:
 ```
 self.operatorRepresentation['size'] = np.prod(data_.shape)
 self.operatorRepresentation['lastDim'] = data_.shape[-1]
@@ -78,6 +79,7 @@ operatorRepresentation['DATA_LABEL_S'] = signed_data
 pulpVectorAddTemplate = PULPVectorAddTemplate("""
 FUNCTION_SIGNATURE_${DATA_LABEL_S}... (${DATA_LABEL}, ...);
 """)
+FIXME
 ```
 Align the template to the signature of the function(s) you defined in the `kernels` folder. Use the same placeholders as in the previous steps as arguments; you will likely need other labels (hint: that's why we defined a `size` argument to the `Add` operator!). You can define this label freely, but need to keep track of it in the other changes we will make.
 
@@ -88,15 +90,16 @@ We will now bind the ONNX `Add` node to the Template we just defined, and link t
 This is done in `Bindings.py`.
 This is done by defining a `List` of `NodeBinding` objects; each in turn calls the `TypeChecker` for a specific ONNX node and a set of passes.
 
-1. Look up in `Deeploy/Targets/<PLATFORM>/TypeCheckers.py` for a suitable `TypeChecker` for the `Add` node, then import it into `Bindings.py`.
-2. Start defining a `NodeBinding` for the unsigned version of the operator. The `NodeBinding` is built with three arguments:
+1. Import the appropriate template as defined in `Templates.py` in Task 3.
+2. Look up in `Deeploy/Targets/<PLATFORM>/TypeCheckers.py` for a suitable `TypeChecker` for the `Add` node, then import it into `Bindings.py`.
+3. Start defining a `NodeBinding` for the unsigned version of the operator. The `NodeBinding` is built with three arguments:
    1. an operator `TypeChecker`
    2. the template you defined in Task 3
    3. the set of passes
 Define from the `TypeChecker` you just imported the appropriate node interface for an `Add` with unsigned I/O.
-3. Use the template you instantiated in `Templates.py` as second argument.
-4. Look up in `Deeploy/Targets/PULPOpen/Bindings.py` for a set of passes that is suitable. Most PULP operators use the same set, why not do the same?
-5. Add a second `NodeBinding` for the signed version of the operator.
+4. Use the template you instantiated in `Templates.py` as second argument.
+5. Look up in `Deeploy/Targets/PULPOpen/Bindings.py` for a set of passes that is suitable. Most PULP operators use the same set, why not do the same?
+6. Add a second `NodeBinding` for the signed version of the operator.
 
 ## Task 5 - Define tile constraints
 We can now define a set of tile constraints. In most cases, you can use or adapt one of the ones available in `Deeploy/Targets/<PLATFORM>/TileConstraints`, but in this instance we'll define it from scratch for instruction purposes. You're very lucky!
@@ -196,21 +199,31 @@ placeholderTilingReadyBindings = TilingReadyNodeBindings(
 
 ## Task 7 - Link the parser and bindings into Deeploy
 In `Platform.py`, we remap the default implementation for `Add` towards our own implementation:
-1. Instantiate a `NodeMapper` object using the parser and tiling-ready bindings that have been defined:
+1. Import the appropriate parser from `Parsers.py`.
+2. Import the appropriate tiling-ready bindings from `TilingReadyBindings.py`.
+3. Instantiate a `NodeMapper` object using the parser and tiling-ready bindings that have been defined:
 ```
     placeholderAddMapper = NodeMapper(
         PlaceholderParser(),
         placeholderTilingReadyBindings
     )
 ```
-2. Remap the `Add` node to the new mapper:
+4. Remap the `Add` node to the new mapper:
 ```
 platform.engines[1].Mapping['Add'] = AddLayer([placeholderAddMapper])
 ```
 
 ## Task 8 - Test and debug!
 You can now test (and debug) your newly created node.
-In terminal, type:
+Setup the terminal:
+```
+export TOOLCHAIN_LLVM_INSTALL_DIR=/app/install/llvm
+export TOOLCHAIN_LLVM_LIBC_DIR=/app/install/llvm/picolibc/riscv/rv32imc
+export TOOLCHAIN_LLVM_COMPILER_RT_DIR=/app/install/llvm/lib/clang/15.0.0/lib/baremetal/rv32imc
+export GVSOC=/app/install/gvsoc/bin/gvsoc
+export DEEPLOY_TARGET_LIBS=/workspaces/unitn-2025/Deeploy/TargetLibraries/PULPOpen
+```
+Then run the test:
 ```
 make codegen testgen test
 ```

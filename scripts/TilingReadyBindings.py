@@ -59,8 +59,6 @@ class PlaceholderTileConstraint(TileConstraint):
 
         ## TASK 6.2: extract base addresses
         inputBaseOffsets, outputBaseOffsets = None, None
-        ## inputBaseOffsets, outputBaseOffsets = cls.extractBaseAddr(tilingSolution, targetMemLevel,
-                                                                #   operatorRepresentation, addrNames)
 
         ## TASK 6.3: set replacements
 
@@ -69,9 +67,9 @@ class PlaceholderTileConstraint(TileConstraint):
         ## TASK 6.5: set I/O load schedules
 
         ## TASK 6.6: tiling schedule
+        tilingSchedule = None
 
         ## TASK 6.7: variable replacement schedule
-        tilingSchedule = None
         variableReplacementSchedule = None
 
         return variableReplacementSchedule, tilingSchedule

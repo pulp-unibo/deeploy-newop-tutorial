@@ -19,11 +19,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from Templates import pulpISoftmaxTemplate, pulp_vectorAddTemplate
 from Deeploy.AbstractDataTypes import PointerClass
 from Deeploy.CommonExtensions.DataTypes import int8_t, uint8_t, float32_t
 from Deeploy.DeeployTypes import NodeBinding
 from Deeploy.Targets.PULPOpen.Bindings import ForkTransformer
+
+## TASK 4.1
+from Templates import SOMETHING
 
 ## `TypeCheckers` are classes used to verify that the input and output data types
 ## of computational nodes (such as layers or operations) match the expected types

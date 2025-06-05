@@ -21,7 +21,10 @@
 from typing import Tuple
 import onnx_graphsurgeon as gs
 from Deeploy.DeeployTypes import NetworkContext
-import numpy as np
+import numpy as n
+
+## TASK 2.1
+from Deeploy.Targets.PLACEHOLDER.Parsers import SOMETHING
 
 ## NodeParsers are classes responsible for interpreting and extracting relevant information
 ## from computational graph nodes (represented as ONNX or other model nodes). They analyze
@@ -40,7 +43,7 @@ import numpy as np
 ##       ONNX context with names in an internal operatorRepresentation.
 ##
 
-## TASK 2.1
+## TASK 2.2
 class PlaceholderParser(NodeParser):
 
     def __init__(self):
@@ -51,7 +54,7 @@ class PlaceholderParser(NodeParser):
         PLACEHOLDER_NB_INPUTS  = 2
         PLACEHOLDER_NB_OUTPUTS = 1
 
-        # TASK 2.2: return True when the number of I/Os is correct
+        # TASK 2.3: return True when the number of I/Os is correct
         return False
 
     def parseNodeCtxt(self,
@@ -59,6 +62,6 @@ class PlaceholderParser(NodeParser):
                       node: gs.Node,
                       channels_first: bool = True) -> Tuple[NetworkContext, bool]:
         
-        # TASK 2.3-5: fill this with actual content
+        # TASK 2.4-6: fill this with actual content
 
         return ctxt, True

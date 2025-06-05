@@ -17,12 +17,18 @@ target_link_libraries(siracusa-network PRIVATE pulp-sdk)
 
 set(PULPNNVERSION XPULPV2)
 set(PULPNNBITWIDTH 32)
-add_subdirectory(third_party/pulp-nn-mixed)
+add_subdirectory(
+	$ENV{DEEPLOY_TARGET_LIBS}/third_party/pulp-nn-mixed
+	${CMAKE_BINARY_DIR}/pulp-nn-mixed-build
+)
 target_link_libraries(pulp-nn-mixed PRIVATE pulp-sdk)
 target_link_libraries(siracusa-network PUBLIC pulp-nn-mixed)
 
 set(USE_NEUREKA ON)
-add_subdirectory(third_party/pulp-nnx)
+add_subdirectory(
+	$ENV{DEEPLOY_TARGET_LIBS}/third_party/pulp-nnx
+	${CMAKE_BINARY_DIR}/pulp-nnx-build
+)
 target_link_libraries(pulp-nnx PRIVATE pulp-sdk)
 target_link_libraries(siracusa-network PUBLIC pulp-nnx)
 

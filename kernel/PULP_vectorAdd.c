@@ -25,6 +25,6 @@ void PULP_vectorAdd_u8_u8_u8(uint8_t *x, uint8_t *y, uint8_t *z,
   // TASK 1: define me
 }
 
-void PULP_vectorAdd_s8_s8_s8(int8_t *x, int8_t *y, int8_t *z, int size) {
+void PULP_vectorAdd_i8_i8_i8(int8_t *x, int8_t *y, int8_t *z, int size) {
   // TASK 1: define me
 }

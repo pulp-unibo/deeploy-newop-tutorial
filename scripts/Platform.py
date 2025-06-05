@@ -23,8 +23,10 @@ from Deeploy.MemoryLevelExtension.NetworkDeployers.MemoryLevelDeployer import Me
 from Deeploy.MemoryLevelExtension.MemoryLevels import MemoryHierarchy, MemoryLevel
 from Deeploy.Targets.Generic.Layers import SoftmaxLayer, AddLayer
 from Deeploy.Targets.Neureka.Platform import MemoryNeurekaPlatform
-from Parsers import ISoftmaxParser, PULP_vectorAddParser
-from TilingReadyBindings import iSoftmaxTilingReadyBindings, PULP_vectorAddTilingReadyBindings
+
+## TASK 7.1, 7.2
+from Parsers import SOMETHING
+from TilingReadyBindings import SOMETHING
 
 # TASK 9
 L3 = MemoryLevel(name = "L3", neighbourNames = ["L2"], size = 4000000)
@@ -45,4 +47,4 @@ platform = MemoryNeurekaPlatform(
 
 platform.engines[1].includeList.remove("DeeployBasicMath.h")
 
-# TASK 7.1, 7.2
+# TASK 7.3, 7.4
